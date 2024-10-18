@@ -4,7 +4,8 @@
    </head>
    <body>
       <div id="sessionId"></div>
-      Phone side
+      <input type="text" id="message" />
+      <button onclick="sendMessage()">Send</button>
    </body>
 
    <script>
@@ -26,5 +27,23 @@
                console.log(message.data);
             };
          });
+
+      function sendMessage() {
+         const message = document.getElementById('message').value;
+         fetch('/onmessage/', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+               sessionId: sessionId,
+               message: message
+            }),
+         })
+            .then(response => response.json())
+            .then(data => {
+               console.log(data);
+            });
+      }
    </script>
 </html>

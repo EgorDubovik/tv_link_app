@@ -7,6 +7,7 @@ const app = express();
 const port = 3100;
 
 app.use(express.static('public'));
+app.use(express.json());
 const sessions = {};
 
 const wss = new WebSocket.Server({ noServer: true });
@@ -77,6 +78,22 @@ app.get('/phone/ws/:sessionId', (req, res) => {
       res.json({wsLink});
    } else {
       res.status(404).send('Session not found');
+   }
+});
+app.post('/onmessage', (req, res) => {
+   
+   const sessionId = req.body.sessionId;
+   const message = req.body.message;
+   console.log('Message received', sessionId, message);
+   if (sessions[sessionId]) {
+      if(sessions[sessionId].tv.readyState === WebSocket.OPEN) {
+         sessions[sessionId].tv.send(JSON.stringify({event: 'message', data: message}));
+         res.json('Message sent');
+      } else {
+         res.status(404).json('Session not found');
+      }
+   } else {
+      res.status(404).json('Session not found');
    }
 });
 
