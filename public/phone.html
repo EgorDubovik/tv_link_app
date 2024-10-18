@@ -1,0 +1,30 @@
+<html>
+   <head>
+      <title>Phone</title>
+   </head>
+   <body>
+      <div id="sessionId"></div>
+      Phone side
+   </body>
+
+   <script>
+      const path = window.location.pathname;  // "/phone/71715540-f756-448e-8342-bd7f6f5a9456"
+      const segments = path.split('/');       // ["", "phone", "71715540-f756-448e-8342-bd7f6f5a9456"]
+      const sessionId = segments[2];
+      document.getElementById('sessionId').innerHTML = sessionId;
+      fetch('/phone/ws/' + sessionId)
+         .then(response => response.json())
+         .then(data => {
+            const ws = new WebSocket(data.wsLink);
+            ws.onopen = () => {
+               console.log('WebSocket Client Connected');
+            };
+            ws.onclose = () => {
+               console.log('WebSocket Client Disconnected');
+            };
+            ws.onmessage = (message) => {
+               console.log(message.data);
+            };
+         });
+   </script>
+</html>

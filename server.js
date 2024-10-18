@@ -17,8 +17,13 @@ wss.on('connection', (ws, req) => {
 
    if (sessions[sessionId]) {
       sessions[sessionId].phones.push(ws);
+      if(sessions[sessionId].tv.readyState === WebSocket.OPEN) {
+         sessions[sessionId].tv.send(JSON.stringify({event: 'phoneConnected', data: sessions[sessionId].phones.length}));
+      }
+      console.log('Phone connected', sessionId);
    } else {
       sessions[sessionId] = {tv: ws, phones: []};
+      console.log('Session created', sessionId);
    }
 
    ws.on('message', (message) => {
@@ -36,8 +41,10 @@ wss.on('connection', (ws, req) => {
                }
             });
             delete sessions[sessionId];
+            console.log('Session closed', sessionId);
          } else {
             sessions[sessionId].phones = sessions[sessionId].phones.filter((phoneWs) => phoneWs !== ws);
+            console.log('Phone disconnected', sessionId);
          }
       }
    });
@@ -49,7 +56,7 @@ app.get('/', (req, res) => {
 
 app.get('/qrcode', (req, res) => {
    const sessionId = uuidv4();
-   const qrData = `http://localhost:${port}/connect/${sessionId}`;
+   const qrData = `http://localhost:${port}/phone/${sessionId}`;
    const wsLink = `ws://localhost:${port}/connect/${sessionId}`;
    QRCode.toDataURL(qrData, (err, url) => {
       if (err) {
@@ -58,6 +65,19 @@ app.get('/qrcode', (req, res) => {
       }
       res.send({sessionId, url, qrData,wsLink});
    });
+});
+
+app.get('/phone/:sessionId', (req, res) => {
+   res.sendFile(__dirname + '/public/phone.html');
+});
+
+app.get('/phone/ws/:sessionId', (req, res) => {
+   if(sessions[req.params.sessionId]) {
+      const wsLink = `ws://localhost:${port}/connect/${req.params.sessionId}`;
+      res.json({wsLink});
+   } else {
+      res.status(404).send('Session not found');
+   }
 });
 
 const server = app.listen(port, () => {
