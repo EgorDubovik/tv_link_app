@@ -1,0 +1,17 @@
+<html>
+<head>
+   <title>TV</title>
+</head>
+<body>
+   <div id="qrcode"></div>
+   <div id="link"></div>
+
+   <script>
+      fetch('/qrcode')
+         .then(response => response.json())
+         .then(data => {
+            document.getElementById('qrcode').innerHTML = "<img src='"+data.url+"' />"; 
+            document.getElementById('link').innerHTML = data.qrData;
+         });
+   </script>
+</html>
