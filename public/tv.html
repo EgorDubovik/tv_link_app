@@ -12,6 +12,16 @@
          .then(data => {
             document.getElementById('qrcode').innerHTML = "<img src='"+data.url+"' />"; 
             document.getElementById('link').innerHTML = data.qrData;
+            const ws = new WebSocket(data.wsLink);
+            ws.onopen = () => {
+               console.log('WebSocket Client Connected');
+            };
+            ws.onclose = () => {
+               console.log('WebSocket Client Disconnected');
+            };
+            ws.onmessage = (message) => {
+               console.log(message.data);
+            };
          });
    </script>
 </html>
