@@ -45,6 +45,7 @@ wss.on('connection', (ws, req) => {
             console.log('Session closed', sessionId);
          } else {
             sessions[sessionId].phones = sessions[sessionId].phones.filter((phoneWs) => phoneWs !== ws);
+            sendToTv(sessionId, JSON.stringify({event: 'phoneConnected', data: sessions[sessionId].phones.length}));
             console.log('Phone disconnected', sessionId);
          }
       }
@@ -112,3 +113,13 @@ server.on('upgrade', (request, socket, head) => {
       socket.destroy();
    }
 });
+
+
+function sendToTv(sessionId, message) {
+   if (sessions[sessionId]) {
+      if(sessions[sessionId].tv.readyState === WebSocket.OPEN) {
+         console.log('Sending to TV', sessionId, message);
+         sessions[sessionId].tv.send(message);
+      }
+   }
+}
