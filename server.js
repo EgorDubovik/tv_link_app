@@ -4,7 +4,7 @@ const QRCode = require('qrcode');
 const {v4: uuidv4} = require('uuid');
 
 const app = express();
-const port = 80;
+const port = 8080;
 const ip = '35.206.80.187';
 
 app.use(express.static('public'));
