@@ -79,7 +79,7 @@
 				<div id="connection_status" class="succsess">TV connected</div>
 				<div id="error_message">Please scan QRcode on TV one more time</div>
 				<div class="input_conteinr" id="input_conteinr">
-					<input type="text" id="message" class="input" />
+					<input placeholder="Paste link here" type="text" id="message" class="input" />
 					<button onclick="sendMessage()" class="button">Send</button>
 				</div>
 			</div>
@@ -154,7 +154,11 @@
 				.then((data) => {
                document.getElementById("message").value = "";
 					console.log(data);
-				});
+				})
+            .catch((error) => {
+               tv_status_action("disconnected");
+               console.log(error);
+            });
 		}
 	</script>
 </html>
