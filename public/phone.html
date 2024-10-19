@@ -152,6 +152,7 @@
 			})
 				.then((response) => response.json())
 				.then((data) => {
+               document.getElementById("message").value = "";
 					console.log(data);
 				});
 		}
