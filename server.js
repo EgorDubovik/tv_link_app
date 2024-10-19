@@ -38,6 +38,7 @@ wss.on('connection', (ws, req) => {
          if (sessions[sessionId].tv === ws) {
             sessions[sessionId].phones.forEach((phoneWs) => {
                if (phoneWs.readyState === WebSocket.OPEN) {
+                  phoneWs.send(JSON.stringify({event: 'tvDisconnected'}));
                   phoneWs.close();
                }
             });
