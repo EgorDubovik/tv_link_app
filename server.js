@@ -4,7 +4,8 @@ const QRCode = require('qrcode');
 const {v4: uuidv4} = require('uuid');
 
 const app = express();
-const port = 3100;
+const port = 80;
+const ip = '35.206.80.187';
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -59,8 +60,8 @@ app.get('/', (req, res) => {
 
 app.get('/qrcode', (req, res) => {
    const sessionId = uuidv4();
-   const qrData = `http://localhost:${port}/phone/${sessionId}`;
-   const wsLink = `ws://localhost:${port}/connect/${sessionId}`;
+   const qrData = `http://${ip}:${port}/phone/${sessionId}`;
+   const wsLink = `ws://${ip}:${port}/connect/${sessionId}`;
    QRCode.toDataURL(qrData, (err, url) => {
       if (err) {
          res.status(500).send('Error generating QR code');
@@ -76,7 +77,7 @@ app.get('/phone/:sessionId', (req, res) => {
 
 app.get('/phone/ws/:sessionId', (req, res) => {
    if(sessions[req.params.sessionId]) {
-      const wsLink = `ws://localhost:${port}/connect/${req.params.sessionId}`;
+      const wsLink = `ws://${ip}:${port}/connect/${req.params.sessionId}`;
       res.json({wsLink});
    } else {
       res.status(404).send('Session not found');
