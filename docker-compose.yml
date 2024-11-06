@@ -12,4 +12,4 @@ services:
     #   retries: 3         # Количество попыток перед тем как считать контейнер неработающим
     #   start_period: 5s  # Время, через которое начать проверки
     #   timeout: 5s
-    restart: no 
+    # restart: no 
