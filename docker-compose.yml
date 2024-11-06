@@ -4,5 +4,5 @@ services:
   tv-server:
     build: .
     ports:
-      - "80:8080"
+      - "8080:8080"
     
