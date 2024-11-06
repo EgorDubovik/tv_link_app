@@ -100,7 +100,7 @@ app.post('/onmessage', (req, res) => {
    }
 });
 
-const server = app.listen(port, () => {
+const server = app.listen(port,'0.0.0.0', () => {
    console.log(`Server started on port ${port}`);
 });
 
