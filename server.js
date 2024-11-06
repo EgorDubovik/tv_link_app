@@ -99,6 +99,9 @@ app.post('/onmessage', (req, res) => {
       res.status(404).json('Session not found');
    }
 });
+app.get('/test', (req, res) => {
+   var a=10/0;
+});
 
 const server = app.listen(port,'0.0.0.0', () => {
    console.log(`Server started on port ${port}`);
