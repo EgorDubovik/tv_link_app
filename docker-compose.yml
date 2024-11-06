@@ -9,9 +9,8 @@ services:
 
   mysql:
     image: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: tv
+    env_file:
+      - .env
     ports:
       - "3306:3306"
     restart: on-failure
