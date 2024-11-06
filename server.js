@@ -6,6 +6,7 @@ const {v4: uuidv4} = require('uuid');
 const app = express();
 const port = 8080;
 const ip = '35.206.80.187';
+// const ip = 'localhost';
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -54,6 +55,11 @@ wss.on('connection', (ws, req) => {
    });
 });
 
+// Маршрут для проверки здоровья
+app.get('/health', (req, res) => {
+   res.status(200).send('Server is healthy');
+ });
+
 app.get('/', (req, res) => {
    res.sendFile(__dirname + '/public/tv.html');
 });
@@ -100,7 +106,8 @@ app.post('/onmessage', (req, res) => {
    }
 });
 app.get('/test', (req, res) => {
-   var a=10/0;
+   // res.send('Test');
+   process.exit(1);
 });
 
 const server = app.listen(port,'0.0.0.0', () => {
